@@ -1,4 +1,7 @@
 #import "BranchSDK.h"
+// BEGIN Modified for Offline (1 of 3)!!!
+#import "BNCPreferenceHelper.h"
+// END Modified for Offline (1 of 3)!!!
 
 NSString * const pluginVersion = @"4.1.3";
 
@@ -85,11 +88,24 @@ NSString * const pluginVersion = @"4.1.3";
     NSString *resultString = nil;
     CDVPluginResult *pluginResult = nil;
 
-    if (!error) {
-      if (params != nil && [params count] > 0) {
+    // BEGIN Modified for Offline (2 of 3)!!!
+    NSString *universalLinkUrl = [BNCPreferenceHelper preferenceHelper].universalLinkUrl;
+    NSMutableDictionary *offlineParams = [NSMutableDictionary dictionary];
+    if (universalLinkUrl != nil && [universalLinkUrl containsString:@"://yourekaapp.app"]) {
+        offlineParams[@"~referring_link"] = universalLinkUrl;
+        [offlineParams setObject:[NSNumber numberWithInt:1] forKey:@"+clicked_branch_link"];
+        NSLog(@"-----------> Deeplink from universalLinkUrl for offline: %@", universalLinkUrl); //Output to Xcode console for monitoring
+    }
+    NSDictionary *paramsToUse = (params != nil && [params count] > 0) ? params : offlineParams;
+    NSLog(@"-----------> Params to be used by deeplink: %@", paramsToUse); //Output to Xcode console for monitoring
 
+    // if (!error) {
+    if (!error || (error && offlineParams[@"~referring_link"] != nil)) {
+      // if (params != nil && [params count] > 0) {
+      if (paramsToUse != nil && paramsToUse[@"~referring_link"] != nil) {
         NSError *err;
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&err];
+        // NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:&err];
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:paramsToUse options:0 error:&err];
 
         if (!jsonData) {
           NSLog(@"Parsing Error: %@", [err localizedDescription]);
@@ -100,8 +116,10 @@ NSString * const pluginVersion = @"4.1.3";
           pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:resultString];
         } else {
           resultString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-          pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+          // pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+          pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:paramsToUse];
         }
+        // END Modified for Offline (2 of 3)!!!
       }
     }
     else {
@@ -117,6 +135,13 @@ NSString * const pluginVersion = @"4.1.3";
 
     if (command != nil) {
       [self.commandDelegate sendPluginResult: pluginResult callbackId: command.callbackId];
+
+      // BEGIN Modified for Offline (3 of 3)!!!
+      // Clear deeplink after use only if you are working offline. The online code will need them later.
+      if (params == nil || [params count] == 0) {
+        [[BNCPreferenceHelper preferenceHelper] clearTrackingInformation ];
+      }
+      // END Modified for Offline (3 of 3)!!!
     }
   }];
 }
