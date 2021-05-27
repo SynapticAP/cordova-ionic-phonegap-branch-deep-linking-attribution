@@ -989,11 +989,49 @@ public class BranchSDK extends CordovaPlugin {
         public void onInitFinished(JSONObject referringParams, BranchError error) {
 
             String out;
+            // Begin Modified for Offline !!!
+            // if (error == null && referringParams != null) {
+            Uri data = activity.getIntent().getData();
 
-            if (error == null && referringParams != null) {
+            if ((error == null && referringParams != null) || data != null) {
+                if(error != null && data != null) {
+                    String formIDProp = "formID";
+                    String dataString = data.toString();
+                    Integer idIndex = dataString.indexOf(formIDProp) + 7;
+                    String formId = dataString.substring(idIndex);
+                    Boolean isFromDeeplink = dataString.indexOf("yourekaapp://open") == -1;
+                    try {
+                        String errorMessage = referringParams.getString("error_message");
+                        if (errorMessage.contains("Trouble reaching server")) {
+                            // remove offline error
+                            referringParams.remove("error_message");
+                        }
+                        referringParams.put("formID",formId); 
+                        referringParams.put("+match_guaranteed",true); 
+                        referringParams.put("$marketing_title","My First Link"); 
+                        referringParams.put("~creation_source",1); 
+                        referringParams.put("~marketing",true); 
+                        referringParams.put("+clicked_branch_link",isFromDeeplink); 
+                        referringParams.put("$one_time_use",false); 
+                        referringParams.put("~id","495759104690883937"); 
+                        referringParams.put("~referring_link",data); 
+                        referringParams.put("~feature","marketing"); 
+                    } catch (JSONException e) {
+                        //some exception handler code.
+                    }  
+                    System.out.println("-------> after mod referringParams.toString(): "+referringParams.toString());
+                } else if (referringParams != null){
+                    System.out.println("-------> no mod referringParams.toString(): "+referringParams.toString());
+                }
+            // End Modified for Offline !!!
+            
                 if (this._callbackContext != null) {
                     this._callbackContext.success(referringParams);
                 }
+
+            // Start Modified for Offline !!!    
+                activity.getIntent().setData(null); // clear data URI so its not used on the next app resume
+            // End Modified for Offline !!!
             } else {
                 JSONObject message = new JSONObject();
                 try {
