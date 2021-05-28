@@ -86,13 +86,14 @@
 }
 
 - (void)processResponse:(BNCServerResponse *)response error:(NSError *)error {
-    if (error) {
-        [BranchOpenRequest releaseOpenResponseLock];
-        if (self.callback) {
-            self.callback(NO, error);
-        }
-        return;
-    }
+    // Modified for Offline (1 of 4) !!!
+    // if (error) {
+    //    [BranchOpenRequest releaseOpenResponseLock];
+    //    if (self.callback) {
+    //        self.callback(NO, error);
+    //    }
+    //    return;
+    // }
 
     BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
     NSDictionary *data = response.data;
@@ -116,6 +117,14 @@
     }
 
     NSString *sessionData = data[BRANCH_RESPONSE_KEY_SESSION_DATA];
+    // Modified for Offline (2 of 4) !!!
+    if (sessionData == nil && preferenceHelper.referringURL != nil) {
+        NSString* paramString = @"{\"+clicked_branch_link\": true,\"+is_first_session\": false,\"~referring_link\":\"";
+        paramString = [paramString stringByAppendingString: preferenceHelper.referringURL];
+        paramString = [paramString stringByAppendingString: @"\"}"];
+        sessionData = paramString;
+    }
+    // End Modified for Offline (2 of 4)
     if (sessionData == nil || [sessionData isKindOfClass:[NSString class]]) {
     } else
     if ([sessionData isKindOfClass:[NSDictionary class]]) {

@@ -2037,11 +2037,13 @@ static inline void BNCPerformBlockOnMainThreadSync(dispatch_block_t block) {
 
     callbackWithStatus initSessionCallback = ^(BOOL success, NSError *error) {
 		dispatch_async(dispatch_get_main_queue(), ^ {
-			if (error) {
-				[self handleInitFailure:error];
-			} else {
+			// Modified for Offline (3 of 4)!!!
+			// if (error) {
+			// 	  [self handleInitFailure:error];
+			// } else {
+				self.shouldAutomaticallyDeepLink = true; // Modified for Offline (4 of 4)!!!
 				[self handleInitSuccess];
-			}
+			// }
 		});
     };
 
