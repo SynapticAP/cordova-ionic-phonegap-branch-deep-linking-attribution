@@ -18,13 +18,6 @@ NSString * const pluginVersion = @"4.1.3";
 - (void)pluginInitialize
 {
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOpenURLNotification:) name:CDVPluginHandleOpenURLNotification object:nil];
-}
-
-- (void)handleOpenURLNotification:(NSNotification*)notification
-{
-    NSURL* url = [notification object];
-    [[Branch getInstance] application:[UIApplication sharedApplication]  openURL:url options:@{}];
 }
 
 #pragma mark - Private APIs
