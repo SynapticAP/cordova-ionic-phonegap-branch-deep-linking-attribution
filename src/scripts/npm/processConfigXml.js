@@ -138,10 +138,10 @@
     // get xcodeproj
     var projectRoot = getProjectRoot(context)
     var projectPath = path.join(projectRoot, 'platforms', 'ios')
-    var projectFiles = context.requireCordovaModule('glob').sync(path.join(projectPath, '*.xcodeproj', 'project.pbxproj'))
+    var projectFiles = require('glob').sync(path.join(projectPath, '*.xcodeproj', 'project.pbxproj'))
     if (projectFiles.length === 0) return
     var pbxPath = projectFiles[0]
-    var xcodeproj = context.requireCordovaModule('xcode').project(pbxPath)
+    var xcodeproj = require('xcode').project(pbxPath)
 
     // add hash
     xcodeproj.parseSync()
@@ -151,7 +151,7 @@
       'xcode': xcodeproj,
       'write': function () {
         // save xcodeproj
-        var fs = context.requireCordovaModule('fs')
+        var fs = require('fs')
         fs.writeFileSync(pbxPath, xcodeproj.writeSync())
 
         // pull framework dependencies
@@ -159,11 +159,11 @@
         var frameworks = {}
 
         try {
-          frameworks = context.requireCordovaModule(frameworksFile)
+          frameworks = require(frameworksFile)
         } catch (e) {}
         // If there are no framework references, remove this file
         if (Object.keys(frameworks).length === 0) {
-          return context.requireCordovaModule('shelljs').rm('-rf', frameworksFile)
+          return require('shelljs').rm('-rf', frameworksFile)
         }
 
         // save frameworks
