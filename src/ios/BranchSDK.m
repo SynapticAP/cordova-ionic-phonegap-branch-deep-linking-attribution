@@ -18,6 +18,7 @@ NSString * const pluginVersion = @"4.1.3";
 - (void)pluginInitialize
 {
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
+  // Modified - Removed the code which was originally added by Branch in v3.x. After removing the code, the deeplinks work correctly when PIN is enabled and app is shutdown.
 }
 
 #pragma mark - Private APIs
