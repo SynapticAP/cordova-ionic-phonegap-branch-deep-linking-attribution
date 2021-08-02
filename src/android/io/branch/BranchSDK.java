@@ -984,10 +984,7 @@ public class BranchSDK extends CordovaPlugin {
 
             if ((error == null && referringParams != null) || data != null) {
                 if(error != null && data != null) {
-                    String formIDProp = "formID";
                     String dataString = data.toString();
-                    Integer idIndex = dataString.indexOf(formIDProp) + 7;
-                    String formId = dataString.substring(idIndex);
                     Boolean isFromDeeplink = dataString.indexOf("yourekaapp://open") == -1;
                     try {
                         String errorMessage = referringParams.getString("error_message");
@@ -995,7 +992,6 @@ public class BranchSDK extends CordovaPlugin {
                             // remove offline error
                             referringParams.remove("error_message");
                         }
-                        referringParams.put("formID",formId); 
                         referringParams.put("+match_guaranteed",true); 
                         referringParams.put("$marketing_title","My First Link"); 
                         referringParams.put("~creation_source",1); 
