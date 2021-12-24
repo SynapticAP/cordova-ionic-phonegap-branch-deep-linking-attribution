@@ -16,7 +16,7 @@
 #import "NSString+Branch.h"
 
 static const NSTimeInterval DEFAULT_TIMEOUT = 5.5;
-static const NSTimeInterval DEFAULT_RETRY_INTERVAL = 0;
+static const NSTimeInterval DEFAULT_RETRY_INTERVAL = 0.1; //0; // MODIFIED
 static const NSInteger DEFAULT_RETRY_COUNT = 3;
 
 static NSString * const BRANCH_PREFS_FILE = @"BNCPreferences";
