@@ -86,7 +86,8 @@ SOFTWARE.
               <source url="https://github.com/CocoaPods/Specs.git"/>
           </config>
           <pods>
-              <pod name="Branch" git="https://github.com/SynapticAP/ios-branch-deep-linking-attribution" tag="0.31.3-custom" />
+              <!-- <pod name="Branch" spec="~> 0.31.3" /> -->
+              <pod name="Branch" git="https://github.com/SynapticAP/ios-branch-deep-linking-attribution.git" tag="0.31.3-custom" />
           </pods>
       </podspec>
   </platform>
