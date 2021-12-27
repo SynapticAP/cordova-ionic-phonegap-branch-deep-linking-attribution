@@ -17,6 +17,8 @@ NSString * const pluginVersion = @"4.1.3";
 
 - (void)pluginInitialize
 {
+  // MODIFIED: add retry delay for deeplinking when the device is offline
+  [BNCPreferenceHelper preferenceHelper].retryInterval = 0.1;
   self.branchUniversalObjArray = [[NSMutableArray alloc] init];
   // Modified - Removed the code which was originally added by Branch in v3.x. After removing the code, the deeplinks work correctly when PIN is enabled and app is shutdown.
 }
