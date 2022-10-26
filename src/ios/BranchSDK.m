@@ -94,6 +94,7 @@ NSString * const pluginVersion = @"4.1.3";
         [offlineParams setObject:[NSNumber numberWithInt:1] forKey:@"+clicked_branch_link"];
         NSLog(@"-----------> Deeplink from universalLinkUrl for offline: %@", universalLinkUrl); //Output to Xcode console for monitoring
     }
+    NSLog(@"-----------> offlineParams to be used by deeplink: %@", offlineParams);
     NSDictionary *paramsToUse = (params != nil && [params count] > 0) ? params : offlineParams;
     NSLog(@"-----------> Params to be used by deeplink: %@", paramsToUse); //Output to Xcode console for monitoring
 
