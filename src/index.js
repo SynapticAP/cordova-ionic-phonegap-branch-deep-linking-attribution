@@ -86,6 +86,7 @@ Branch.prototype.disableTracking = function disableTracking(isEnabled) {
 };
 
 Branch.prototype.initSession = function initSession() {
+  console.log('BRANCH initSession');
   return execute("initSession");
 };
 
