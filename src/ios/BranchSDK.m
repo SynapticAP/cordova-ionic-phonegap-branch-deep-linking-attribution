@@ -81,6 +81,8 @@ NSString * const pluginVersion = @"4.1.3";
   [[Branch getInstance] registerPluginName:@"CordovaIonic" version:pluginVersion];
   [[Branch getInstance] initSessionWithLaunchOptions:nil andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
 
+    NSLog(@"-----------> Raw Params: %@", params); //Output to Xcode console for monitoring
+
     NSString *resultString = nil;
     CDVPluginResult *pluginResult = nil;
 
