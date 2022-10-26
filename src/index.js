@@ -29,7 +29,7 @@ const standardEvent = {
 
 // Branch prototype
 var Branch = function Branch() {
-  this.debugMode = false;
+  this.debugMode = true;
   this.trackingDisabled = false;
 };
 
