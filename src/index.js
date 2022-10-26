@@ -94,6 +94,7 @@ Branch.prototype.enableTestMode = function initSession() {
 };
 
 Branch.prototype.initSession = function initSession() {
+  console.log('BRANCH initSession');
   this.sessionInitialized = true;
   return execute("initSession");
 };
